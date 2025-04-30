@@ -1,0 +1,77 @@
+sounds
+venv
+__pycache__/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Django
+*.log
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# If using Django collectstatic
+/static/
+
+# Environment
+.env
+.env.*
+venv/
+ENV/
+env/
+.venv/
+.idea/
+.vscode/
+*.code-workspace
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# MyPy / Pyright
+.mypy_cache/
+.pyright/
+
+# pytest
+.cache/
+
+# Coverage reports
+htmlcov/
+.coverage
+coverage.xml
+
+# VS Code test logs
+.pytest_cache/
+
+# Docker
+*.pid
+
+# Pipenv
+Pipfile.lock
+
+# PyCharm
+*.iml
+*.ipr
+*.iws
+.idea/
+
+sl-app/data/

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Stel uw volume in{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Stel uw volume in</h2>
+
+<p>
+Voordat we beginnen met de test, is het belangrijk dat u het volume van uw apparaat goed instelt. U hoort zo meteen twee testgeluiden:
+</p>
+<ul>
+  <li><strong>Geluid 1</strong> is zacht, maar moet <emnet hoorbaar</em> zijn</li>
+  <li><strong>Geluid 2</strong> is luider, maar mag <em>niet oncomfortabel</em> zijn</li>
+</ul>
+
+<p>
+Pas het volume aan tot dit klopt. Gebruik bij voorkeur een hoofdtelefoon of oordopjes.
+</p>
+
+<!-- Geluid 1: zacht -->
+<div class="mb-3">
+  <button class="btn btn-outline-primary" onclick="document.getElementById('soft-audio').play()">Speel zacht geluid af</button>
+  <audio id="soft-audio" src="{% static 'audio/setup_soft.wav' %}" preload="auto"></audio>
+</div>
+
+<!-- Geluid 2: hard -->
+<div class="mb-4">
+  <button class="btn btn-outline-danger" onclick="document.getElementById('loud-audio').play()">Speel harder geluid af</button>
+  <audio id="loud-audio" src="{% static 'audio/setup_loud.wav' %}" preload="auto"></audio>
+</div>
+
+<!-- Bevestiging -->
+<div class="form-check mb-3">
+  <input class="form-check-input" type="checkbox" id="volume-ok" onchange="checkVolumeConfirmed()">
+  <label class="form-check-label" for="volume-ok">
+    Ik heb het volume ingesteld: het zachte geluid is hoorbaar en het harde geluid is luid maar niet te hard.
+  </label>
+</div>
+
+<!-- Ga door knop -->
+<a id="continue-btn" href="{% url 'test_question' qid %}" class="btn btn-success disabled" tabindex="-1" aria-disabled="true">
+  Start de test
+</a>
+
+<script>
+function checkVolumeConfirmed() {
+    const checkbox = document.getElementById('volume-ok');
+    const button = document.getElementById('continue-btn');
+
+    if (checkbox.checked) {
+        button.classList.remove('disabled');
+        button.removeAttribute('tabindex');
+        button.removeAttribute('aria-disabled');
+    } else {
+        button.classList.add('disabled');
+        button.setAttribute('tabindex', '-1');
+        button.setAttribute('aria-disabled', 'true');
+    }
+}
+</script>
+{% endblock %}

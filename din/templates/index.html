@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Welkom bij de Digits-in-Noise Test</h2>
+
+<p>
+De Digits-in-Noise-test is een gehoortest waarbij u cijfers hoort in de aanwezigheid van achtergrondgeluid.
+Het doel is om te meten hoe goed u spraak kunt verstaan in een rumoerige omgeving.
+</p>
+
+<p>
+Tijdens de test hoort u telkens een reeks van drie cijfers, zoals bijvoorbeeld <strong>"5 – 3 – 9"</strong>.
+U voert deze cijfers vervolgens in via het toetsenblok op het scherm.
+De achtergrondruis zal steeds iets veranderen, zodat we nauwkeurig kunnen bepalen hoe goed u kunt verstaan.
+</p>
+
+<p>
+Zorg ervoor dat u de test afneemt in een rustige omgeving en oordopjes of een hoofdtelefoon gebruikt.
+De test duurt ongeveer 5 tot 10 minuten.
+</p>
+
+<p>
+Voordat we beginnen, stellen we u een paar korte vragen, zoals uw leeftijd en of u momenteel gehoorproblemen ervaart.
+Deze informatie helpt ons om de resultaten correct te interpreteren.
+</p>
+
+<p>
+Klik op de knop hieronder om verder te gaan naar de vragen. Daarna begint de test automatisch.
+</p>
+
+<a href="{% url 'questionary' %}" class="btn btn-primary mt-3">Begin</a>
+
+{% endblock %}

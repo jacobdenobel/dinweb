@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Test voltooid{% endblock %}
+
+{% block content %}
+<div class="">
+    <h2 class="mb-4">Bedankt voor uw deelname!</h2>
+
+    <p class="lead">
+        U heeft de test succesvol afgerond. Bedankt voor uw inzet en aandacht.
+    </p>
+
+    <p>
+        Uw antwoorden zijn opgeslagen en zullen worden gebruikt voor wetenschappelijk onderzoek
+        naar spraakverstaan in ruis. Uw gegevens worden anoniem verwerkt.
+    </p>
+
+    <p>
+        U krijgt op dit moment geen persoonlijke uitslag te zien. Als u vragen heeft over het onderzoek
+        of interesse heeft in verdere informatie, neem dan contact op met het onderzoeksteam.
+    </p>
+
+    <a href="{% url 'index' %}" class="btn btn-primary mt-4">Terug naar startpagina</a>
+</div>
+{% endblock %}

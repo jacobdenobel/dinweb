@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% block inner %}{% endblock  %}
+
+
+<div class="container ">
+    <div class="mb-3 text-center">
+        <label for="numberInput">Welke cijfers hoort u?</label>
+        <input type="text" id="numberInput" class="form-control text-center" readonly style="font-size: 1.5rem;">
+    </div>
+
+    <div class="d-grid gap-2" style="max-width: 300px; margin: 0 auto;">
+        <div class="row g-2">
+            {% for row in keypad_rows %}
+            <div class="col-12 d-flex justify-content-between">
+                {% for digit in row %}
+                <button class="btn btn-outline-primary flex-fill mx-1" onclick="appendDigit('{{ digit }}')">{{ digit }}</button>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <div class="col-12 d-flex justify-content-between mt-2">
+                <button class="btn btn-outline-secondary flex-fill mx-1" onclick="clearInput()">Clear</button>
+                <button class="btn btn-outline-success flex-fill mx-1" onclick="submitNumber()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form method="post" id="answer-form">
+    {% csrf_token %}
+    <input type="hidden" name="answer" id="answerField">
+</form>
+
+
+<script>
+    function appendDigit(digit) {
+        const input = document.getElementById('numberInput');
+        if (input.value.length < 3) {
+            input.value += digit;
+        }
+    }
+
+    function clearInput() {
+        document.getElementById('numberInput').value = '';
+    }
+
+    function submitNumber() {
+        const input = document.getElementById('numberInput').value;
+        if (input.length === 3) {
+            document.getElementById('answerField').value = input;
+            document.getElementById('answer-form').submit();
+        } else {
+            alert("Voer precies 3 cijfers in.");
+        }
+    }
+</script>
+{% endblock %}
