@@ -1,9 +1,9 @@
-{% extends "digit.html" %}
+{% extends "base.html" %}
 
 {% load static %}
 {% block title %}Voorbeeldvraag{% endblock %}
 
-{% block inner %}
+{% block content %}
 <h2 class="mb-3">Voorbeeldvraag – Hoe werkt de test?</h2>
 
 <p>
@@ -11,7 +11,7 @@ U staat op het punt om te starten met de <strong>Digits-in-Noise</strong>-test. 
 </p>
 
 <p>
-Tijdens de volledige test krijgt u in totaal <strong>drie verschillende reeksen</strong> te horen, elk met <strong>een andere soort achtergrondruis</strong>. Elke reeks bevat <strong>24 testvragen</strong>.
+Tijdens de volledige test krijgt u in totaal <strong>{{n_tests}} verschillende reeksen</strong> te horen, elk met <strong>een andere soort achtergrondruis</strong>. Elke reeks bevat <strong>24 testvragen</strong>.
 </p>
 
 <p>
@@ -24,7 +24,10 @@ De test begint pas echt na deze voorbeeldvraag. Dit is alleen bedoeld om u te la
 
 <div class="mb-3 text-center">
     <button class="btn btn-outline-primary" onclick="document.getElementById('test-audio').play()">Speel voorbeeldgeluid af</button>
-    <audio id="test-audio" src="{% static 'audio/test_046.wav' %}" preload="auto"></audio>
+    <audio id="test-audio" src="{% static 'audio/din/046.wav' %}" preload="auto"></audio>
 </div>
+
+{% include "components/digit.html" %}
+
 
 {% endblock %}

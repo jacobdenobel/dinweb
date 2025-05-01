@@ -17,16 +17,20 @@ Voordat we beginnen met de test, is het belangrijk dat u het volume van uw appar
 Pas het volume aan tot dit klopt. Gebruik bij voorkeur een hoofdtelefoon of oordopjes.
 </p>
 
+<p class="text-danger">
+  <strong>Pas op!</strong> Het harde geluid kan vrij hard staan wanneer u uw volume al erg hoog heeft staan. 
+</p>
+
 <!-- Geluid 1: zacht -->
 <div class="mb-3">
   <button class="btn btn-outline-primary" onclick="document.getElementById('soft-audio').play()">Speel zacht geluid af</button>
-  <audio id="soft-audio" src="{% static 'audio/setup_soft.wav' %}" preload="auto"></audio>
+  <audio id="soft-audio" src="{% static 'audio/soft_test.wav' %}" preload="auto"></audio>
 </div>
 
 <!-- Geluid 2: hard -->
 <div class="mb-4">
   <button class="btn btn-outline-danger" onclick="document.getElementById('loud-audio').play()">Speel harder geluid af</button>
-  <audio id="loud-audio" src="{% static 'audio/setup_loud.wav' %}" preload="auto"></audio>
+  <audio id="loud-audio" src="{% static 'audio/loud_test.wav' %}" preload="auto"></audio>
 </div>
 
 <!-- Bevestiging -->

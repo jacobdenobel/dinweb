@@ -1,10 +1,4 @@
-{% extends "base.html" %}
-
-{% block content %}
-{% block inner %}{% endblock  %}
-
-
-<div class="container ">
+<div class="container">
     <div class="mb-3 text-center">
         <label for="numberInput">Welke cijfers hoort u?</label>
         <input type="text" id="numberInput" class="form-control text-center" readonly style="font-size: 1.5rem;">
@@ -15,7 +9,11 @@
             {% for row in keypad_rows %}
             <div class="col-12 d-flex justify-content-between">
                 {% for digit in row %}
-                <button class="btn btn-outline-primary flex-fill mx-1" onclick="appendDigit('{{ digit }}')">{{ digit }}</button>
+                    {% if digit != '' %}
+                        <button class="btn btn-outline-primary flex-fill mx-1" onclick="appendDigit('{{ digit }}')">{{ digit }}</button>
+                    {% else %}
+                        <span class="btn flex-fill mx-1" disabled></span>
+                    {% endif %}    
                 {% endfor %}
             </div>
             {% endfor %}
@@ -31,7 +29,6 @@
     {% csrf_token %}
     <input type="hidden" name="answer" id="answerField">
 </form>
-
 
 <script>
     function appendDigit(digit) {
@@ -55,4 +52,4 @@
         }
     }
 </script>
-{% endblock %}
+

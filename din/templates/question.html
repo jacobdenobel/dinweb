@@ -1,20 +1,37 @@
-{% extends "digit.html" %}
+{% extends "base.html" %}
 
 {% load static %}
 {% block title %}Testvraag{% endblock %}
 
-{% block inner %}
-<h2 class="mb-3">Testvraag {{ current }}/{{ total }}</h2>
+{% block content %}
+<h2 class="mb-3">Reeks {{ nth_test }}/{{ total_tests }}</h2>
+<h3 class="mb-3">Vraag {{ current }}/{{ total }}</h3>
+
+{% if response.answered %}
+    <p class="text-danger">Het lijkt erop dat u deze vraag al heeft beantwoord, klik hieronder om door te gaan naar de volgende vraag.</p>
+    <a href="{{ next_url }}" class="btn btn-outline-primary">Volgende vraag</a>
+{% else %}
 
 <p>
     U hoort een reeks van drie cijfers tegen achtergrondruis.<br>
-    Voer ze hieronder in met het toetsenblok. Weet u het niet zeker? <strong>Gok gerust</strong>.
+    Voer ze hieronder in met het toetsenblok. Weet u het niet zeker? <strong>Gok gerust</strong>. <br>
+    U kunt het geluid maar een keer afspelen.
 </p>
 
 <div class="text-center mb-3">
-    <button class="btn btn-outline-primary" onclick="document.getElementById('test-audio').play()">Speel geluid af</button>
-    <audio id="test-audio" src="{{ audio_url }}" preload="auto"></audio>
+    <button class="btn btn-outline-primary" id="play-button" onclick="playAndDisable()">Speel geluid af</button>
+    <audio id="test-audio" src="{{ response.stimulus.static_url }}" preload="auto"></audio>
 </div>
 
+<script>
+    function playAndDisable(){
+        document.getElementById('test-audio').play();
+        const btn = document.getElementById('play-button');
+        btn.disabled = true;
+    }
+</script>
 
+{% include "components/digit.html" %}
+
+{% endif %}
 {% endblock %}

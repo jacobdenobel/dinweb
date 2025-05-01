@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import AudioGenerator, Test, Stimulus, Experiment, Response, Questionary
+from .models import AudioGenerator, Test, Stimulus, Response, Questionary
 
 
 def make_readonly(mod, extra_fields=None):
@@ -27,8 +27,7 @@ def register_with_inline(mod, inline_mods, excludes = None, extra_fields = None,
 
 
 register_with_inline(AudioGenerator, (make_readonly(Test), ))
-register_with_inline(Test, (make_readonly(Experiment), ))
+register_with_inline(Test, (make_readonly(Stimulus), ))
 register_with_inline(Stimulus, (make_readonly(Response), ))
-register_with_inline(Experiment, (make_readonly(Response), ))
-register_with_inline(Questionary, (make_readonly(Experiment), ))
+register_with_inline(Questionary, ( ))
 register_with_inline(Response, ())

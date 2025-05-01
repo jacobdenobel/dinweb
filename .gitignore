@@ -75,3 +75,4 @@ Pipfile.lock
 .idea/
 
 sl-app/data/
+static/

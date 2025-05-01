@@ -1,7 +1,9 @@
+import random
+
 from django import forms
 from django.shortcuts import render, redirect
 
-from din.models import Questionary
+from din.models import Questionary, Test, Response, Stimulus
 
 
 def context_processor(request):
@@ -9,6 +11,7 @@ def context_processor(request):
         ["1", "2", "3"],
         ["4", "5", "6"],
         ["7", "8", "9"],
+        ["",  "0", ""],
     ]
     return {"keypad_rows": keypad_rows}
 
@@ -63,27 +66,71 @@ def setup(request, qid):
 
 def test_question(request, qid):
     if request.method == "POST":
-        return redirect("question", qid, 0)
+        random_test = random.choice(Test.objects.values_list('pk', flat=True))
+        return redirect("question", qid, random_test, 1)
 
-    return render(request, "test_question.html")
+    return render(request, "test_question.html", {"n_tests": Test.objects.count()})
+
+def get_available_tests(questionary):
+    responses = Response.objects.filter(questionary=questionary)
+    test_already_done = set(responses.values_list('test_id', flat=True).distinct())
+    available_tests = set(Test.objects.values_list('pk', flat=True))
+    return list(available_tests - test_already_done)
 
 
-def question(request, qid, question_number):
-    total_questions = 2
+def get_next_url(request, test, questionary):
+    parts = request.path.split("/")
+    next_q = int(parts[-2]) + 1
+    
+    if next_q > test.n_questions:
+        next_tests = get_available_tests(questionary)
+        if len(next_tests) == 0:
+            return "/test_complete"
+        parts[-3] = str(random.choice(next_tests))
+        parts[-2] = str(1)
+    else:
+        parts[-2] = str(next_q)
+    
+    return "/".join(parts)
+    
+
+def question(request, qid, tid, question_number):
+    test = Test.objects.get(pk=tid)
+    questionary = Questionary.objects.get(pk=qid)
+    
+    response, _ = Response.objects.get_or_create(
+        index=question_number,
+        questionary=questionary,
+        test=test, 
+    )
+    
+    available_tests = get_available_tests(questionary)
+    if not response.stimulus:
+        stims = Stimulus.objects.filter(test=test, level=response.get_level())
+        response.stimulus = random.choice(stims)
+        response.save()
+    
     if request.method == "POST":
-        user_answer = request.POST.get("answer")
+        user_answer = request.POST.get("answer").strip()
+        if not response.answered:
+            response.answer = user_answer
+            response.save()
+            
         next_q = int(question_number) + 1
+        if next_q > test.n_questions:
+            if len(available_tests) == 0:
+                return redirect('test_complete')
+            next_test = random.choice(available_tests)
+            return redirect('question', qid, next_test, 1)
+        return redirect('question', qid, tid, next_q)
         
-        if next_q > total_questions:
-            return redirect('test_complete')
-        
-        return redirect('question', qid=qid, question_number=next_q)
-        
-
     return render(request, "question.html", {
+        'response': response,
         'current': question_number,
-        'total': total_questions,
-        'audio_url': '',
+        'total': test.n_questions,
+        'nth_test': (len(available_tests) + 2) - Test.objects.count(),
+        'total_tests': Test.objects.count(),
+        'next_url': get_next_url(request, test, questionary),
     })
     
 def test_complete(request):

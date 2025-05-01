@@ -21,14 +21,16 @@ class Command(BaseCommand):
         
 
     def handle(self, *args, **options):
-        data_sets = os.listdir(settings.MEDIA_ROOT)
+        base_folder = settings.STATIC_DIR / "audio"
+
+        data_sets = os.listdir(base_folder)
         if options['name'] not in data_sets:
             print(options['name'], "not found")
             return 
         
         data_set, *_ = [d for d in data_sets if d == options['name']]
-
-        audio_generator, created = AudioGenerator.objects.get_or_create(name=options['name'])
+        generator_name = options['name'].replace("din_", '')
+        audio_generator, created = AudioGenerator.objects.get_or_create(name=generator_name)
         print(audio_generator)
         test, created = Test.objects.get_or_create(
             name=options['test_name'],
@@ -45,9 +47,9 @@ class Command(BaseCommand):
             return 
         
         stimuli = []
-        for snr in os.listdir(settings.MEDIA_ROOT / data_set):
+        for snr in os.listdir(base_folder / data_set):
             level = int(snr.split("snr")[1])
-            for wav in os.listdir(settings.MEDIA_ROOT / data_set / snr / 'rep00'):
+            for wav in os.listdir(base_folder / data_set / snr ):
                 name = f"{snr}_{wav}"
                 label, *_ = wav.split(".")
                 stim = Stimulus(name=name, test=test, level=level, label=label)
