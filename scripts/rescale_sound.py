@@ -38,6 +38,7 @@ if __name__ == "__main__":
     parser.add_argument("--soft", action='store_true')
     parser.add_argument("--loud", action='store_true')
     parser.add_argument("--save", type=str, default=None)
+    parser.add_argument("--save_inplace", action='store_true')
     args = parser.parse_args()
     
     
@@ -47,6 +48,9 @@ if __name__ == "__main__":
         db = SOFT_DBFS
     else: 
         db = TEST_DBFS
+        
+    if args.save_inplace:
+        args.save = args.path
     
     if os.path.isfile(args.path):   
         rescale(args.path, db, args.save)
@@ -58,6 +62,12 @@ if __name__ == "__main__":
         for f in os.listdir(args.path):
             path = os.path.join(args.path, f)
             save = args.save if args.save is None else os.path.join(args.save, f)
-            rescale(path, db, save)
-    
+            if os.path.isfile(path):
+                rescale(path, db, save)
+            elif os.path.isdir(path):
+                for f in os.listdir(path):
+                    f_path = os.path.join(path, f)
+                    f_save = args.save if args.save is None else os.path.join(save, f)
+                    if os.path.isfile(f_path):
+                        rescale(f_path, db, f_save)
         

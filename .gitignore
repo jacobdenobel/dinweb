@@ -74,5 +74,4 @@ Pipfile.lock
 *.iws
 .idea/
 
-sl-app/data/
-static/
+din/static/audio

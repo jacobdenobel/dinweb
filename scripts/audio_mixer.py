@@ -33,8 +33,6 @@ def mix(stim, noise, snr, relative_scaling=True):
     return mixed
             
 
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--min_snr", type=int, default=-20)

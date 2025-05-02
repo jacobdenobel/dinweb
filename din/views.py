@@ -65,16 +65,17 @@ def setup(request, qid):
 
 
 def test_question(request, qid):
+    tests = Test.objects.filter(active=True)
     if request.method == "POST":
-        random_test = random.choice(Test.objects.values_list('pk', flat=True))
+        random_test = random.choice(tests.values_list('pk', flat=True))
         return redirect("question", qid, random_test, 1)
 
-    return render(request, "test_question.html", {"n_tests": Test.objects.count()})
+    return render(request, "test_question.html", {"n_tests": tests.count()})
 
 def get_available_tests(questionary):
     responses = Response.objects.filter(questionary=questionary)
     test_already_done = set(responses.values_list('test_id', flat=True).distinct())
-    available_tests = set(Test.objects.values_list('pk', flat=True))
+    available_tests = set(Test.objects.filter(active=True).values_list('pk', flat=True))
     return list(available_tests - test_already_done)
 
 
@@ -123,13 +124,18 @@ def question(request, qid, tid, question_number):
             next_test = random.choice(available_tests)
             return redirect('question', qid, next_test, 1)
         return redirect('question', qid, tid, next_q)
-        
+    
+    n_tests = Test.objects.filter(active=True).count()
+    nth_test = Response.objects.filter(
+        questionary=questionary).values_list(
+            'test_id', flat=True
+    ).distinct().count()
     return render(request, "question.html", {
         'response': response,
         'current': question_number,
         'total': test.n_questions,
-        'nth_test': (len(available_tests) + 2) - Test.objects.count(),
-        'total_tests': Test.objects.count(),
+        'nth_test': nth_test,
+        'total_tests': n_tests,
         'next_url': get_next_url(request, test, questionary),
     })
     

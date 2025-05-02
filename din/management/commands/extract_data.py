@@ -139,6 +139,7 @@ class Command(BaseCommand):
         for entry in entries:
             responses = Response.objects.filter(questionary=entry)
             tests = responses.values_list("test_id", flat=True).distinct()
+            
             for test in tests:
                 test = Test.objects.get(id=test)
                 test_responses = responses.filter(test=test).order_by("index")
@@ -156,11 +157,11 @@ class Command(BaseCommand):
                     entry.id,
                     entry.age,
                     test.name,
-                    test.audio_generator.name,
+                    test.audio_generator,
                     srt,
                 ]
                 print(record)
                 fig = get_plots(levels, n_correct, srt)
-                fig.suptitle(f"{entry.id} {test.name}_{test.audio_generator.name}")
+                fig.suptitle(f"{entry.id} {test.name}_{test.audio_generator}")
                 plt.tight_layout()
-                plt.show()
+            plt.show()

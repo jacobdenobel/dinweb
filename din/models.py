@@ -2,15 +2,7 @@ from django.conf import settings
 from django.db import models
 
 
-class AudioGenerator(models.Model):
-    name = models.CharField(max_length=100, default="raw")
-
-    def __str__(self):
-        return self.name
-
-
 class Test(models.Model):
-    name = models.CharField(max_length=100, default="din")
     language = models.CharField(max_length=2, default="nl")
     n_questions = models.PositiveSmallIntegerField(default=24)
     starting_level = models.IntegerField(default=0)
@@ -18,7 +10,9 @@ class Test(models.Model):
     min_level = models.IntegerField(default=-20)
     max_level = models.IntegerField(default=10)
     n_stimuli = models.IntegerField(default=128)
-    audio_generator = models.ForeignKey(AudioGenerator, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, default="din")
+    audio_generator = models.CharField(max_length=100, default="din")
+    active = models.BooleanField()
 
 
 class Stimulus(models.Model):
@@ -34,8 +28,8 @@ class Stimulus(models.Model):
     @property
     def static_url(self):
         return (
-            f"{settings.STATIC_URL}/audio/"
-            f"{self.test.name}_{self.test.audio_generator.name}"
+            f"{settings.MEDIA_URL}"
+            f"{self.test.name}_{self.test.audio_generator}"
             f"/snr{self.level:+03d}/{self.filename}")
 
 
