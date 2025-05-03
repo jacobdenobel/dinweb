@@ -69,5 +69,8 @@ if __name__ == "__main__":
                     f_path = os.path.join(path, f)
                     f_save = args.save if args.save is None else os.path.join(save, f)
                     if os.path.isfile(f_path):
-                        rescale(f_path, db, f_save)
+                        try:
+                            rescale(f_path, db, f_save)
+                        except:
+                            print(f_path)
         
