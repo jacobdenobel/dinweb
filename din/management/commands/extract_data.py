@@ -152,6 +152,7 @@ class Command(BaseCommand):
                 srt_levels = np.r_[
                     levels[-20:], Response.get_next_level(test_responses.last())
                 ]
+                print(len(srt_levels))
                 srt = np.mean(srt_levels)
                 record = [
                     entry.id,
