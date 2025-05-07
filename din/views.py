@@ -162,9 +162,13 @@ def plot_to_data(fig) -> str:
     return uri
 
 def get_boxplot_snr(tests: Test) -> str:
+    snr_data = [t.get_snrs() for t in tests]
+    if len(snr_data) == 0:
+        return ""
+    
     fig, ax = plt.subplots(figsize=(12, 4))
     ax.violinplot(
-        [t.get_snrs() for t in tests],
+        snr_data,
         showmedians=True,        
     )
     ax.set_xticks([y + 1 for y in range(len(tests))],
