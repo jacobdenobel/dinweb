@@ -187,6 +187,10 @@ def result_overview(request):
     questionaries = Questionary.objects.all() 
     tests = Test.objects.all()
     
+    active_param = request.GET.get('active')
+    if active_param is not None:
+        tests = Test.objects.filter(active=True)    
+    
     return render(request, "results_overview.html", context={
         "questionaries": questionaries,
         "tests": tests,
