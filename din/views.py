@@ -187,11 +187,11 @@ def get_boxplot_snr(tests: Test) -> str:
 @login_required
 def result_overview(request):
     questionaries = Questionary.objects.all() 
-    tests = Test.objects.all()
+    tests = Test.objects.all().order_by("pk")
     
     active_param = request.GET.get('active')
     if active_param is not None:
-        tests = Test.objects.filter(active=True)    
+        tests = tests.filter(active=True)    
         active_q = Response.objects.filter(
             test__in=tests).values_list("questionary", flat=True).distinct()
         questionaries = questionaries.filter(pk__in=active_q)
@@ -206,7 +206,7 @@ def result_overview(request):
 def results(request, qid):
     questionary = Questionary.objects.get(pk=qid)
     responses = questionary.response_set.filter()
-    tests = responses.values_list("test", flat=True).distinct()
+    tests = sorted(responses.values_list("test", flat=True).distinct())
     
     test_results = []
     for test in tests:
