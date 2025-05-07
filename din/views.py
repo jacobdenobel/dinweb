@@ -20,6 +20,7 @@ class QuestionaryForm(forms.ModelForm):
     class Meta:
         model = Questionary
         fields = ["age", "normal_hearing", "first_time", "first_language", "approve"]
+        required_checks = ["normal_hearing", "first_language", "approve"]
         labels = {
             "age": "Wat is uw leeftijd?",
             "normal_hearing": "Heeft u (voor zover u weet) een normaal gehoor?",
@@ -37,7 +38,7 @@ class QuestionaryForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        for field in self.Meta.fields[1:]:
+        for field in self.Meta.required_checks:
             if not cleaned_data.get(field):
                 self.add_error(field, "Vergeet deze checkbox niet!")
         return cleaned_data
