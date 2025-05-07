@@ -28,7 +28,7 @@ def context_processor(request):
 class QuestionaryForm(forms.ModelForm):
     class Meta:
         model = Questionary
-        fields = ["age", "normal_hearing", "first_time", "first_language", "approve"]
+        fields = ["age", "first_time", "normal_hearing", "first_language", "approve"]
         required_checks = ["normal_hearing", "first_language", "approve"]
         labels = {
             "age": "Wat is uw leeftijd?",
