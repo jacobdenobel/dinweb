@@ -163,12 +163,12 @@ def plot_to_data(fig) -> str:
 
 def get_boxplot_snr(tests: Test) -> str:
     with_data = []
+    snr_data = []
     for test in tests:
-        if len(tests.get_snrs()) != 0:
+        snrs = test.get_snrs()
+        if len(snrs) != 0:
             with_data.append(test)
-    
-    
-    snr_data = [t.get_snrs() for t in with_data]
+            snr_data.append(snrs)
     
     fig, ax = plt.subplots(figsize=(12, 4))
     ax.violinplot(
