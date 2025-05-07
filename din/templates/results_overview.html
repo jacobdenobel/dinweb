@@ -44,8 +44,9 @@
       {% endfor %}
     </tbody>
   </table>
-
-  <img src="data:image/png;base64,{{ boxplot }}" class="img-fluid" />
+  {% if boxplot != '' %}
+    <img src="data:image/png;base64,{{ boxplot }}" class="img-fluid" />
+  {% endif %}
 </div>
 
 
