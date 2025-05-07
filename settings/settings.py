@@ -10,10 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import socket
 from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+HOSTNAME = socket.gethostname()
 
 
 # Quick-start development settings - unsuitable for production
@@ -23,7 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-9)&1lm@5kri0tg%$do9!2mth=3a%u145!_mi9696x#3)(q*g)9"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True 
+DEBUG = HOSTNAME == 'calc'
+print(f"Running DEBUG: {DEBUG} on {HOSTNAME}")
 
 ALLOWED_HOSTS = []
 if not DEBUG:
