@@ -169,6 +169,8 @@ def get_boxplot_snr(tests: Test) -> str:
         if len(snrs) != 0:
             with_data.append(test)
             snr_data.append(snrs)
+    if len(snr_data) == 0:
+        return ""
     
     fig, ax = plt.subplots(figsize=(12, 4))
     ax.violinplot(
