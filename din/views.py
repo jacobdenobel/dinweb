@@ -1,10 +1,19 @@
 import random
+import io
+import urllib
+import base64
+
+import numpy as np
+import matplotlib
+matplotlib.use('Agg') 
+import matplotlib.pyplot as plt
 
 from django import forms
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 from din.models import Questionary, Test, Response, Stimulus
-
+from din.utils import plot_psychometric, plot_test_results, get_plots
 
 def context_processor(request):
     keypad_rows = [
@@ -144,3 +153,69 @@ def test_complete(request):
     return render(request, "test_complete.html")
 
 
+def plot_to_data(fig) -> str:
+    buf = io.BytesIO()
+    fig.savefig(buf, format='png',  transparent=True)
+    buf.seek(0)
+    string = base64.b64encode(buf.read())
+    uri = urllib.parse.quote(string)
+    return uri
+
+def get_boxplot_snr(tests: Test) -> str:
+    fig, ax = plt.subplots(figsize=(12, 4))
+    ax.violinplot(
+        [t.get_snrs() for t in tests],
+        showmedians=True,        
+    )
+    ax.set_xticks([y + 1 for y in range(len(tests))],
+                  labels=[f"{t.name}_{t.audio_generator}" for t in tests])
+    ax.grid()
+    return plot_to_data(fig)
+    
+
+
+@login_required
+def result_overview(request):
+    questionaries = Questionary.objects.all() 
+    tests = Test.objects.all()
+    
+    return render(request, "results_overview.html", context={
+        "questionaries": questionaries,
+        "tests": tests,
+        "boxplot": get_boxplot_snr(tests)
+    })
+
+@login_required
+def results(request, qid):
+    questionary = Questionary.objects.get(pk=qid)
+    responses = questionary.response_set.filter()
+    tests = responses.values_list("test", flat=True).distinct()
+    
+    test_results = []
+    for test in tests:
+        test = Test.objects.get(pk=test)
+        test_responses = responses.filter(test=test).order_by("index")
+        completed = test_responses.count() == test.n_questions
+        if not completed:
+            continue
+        
+        levels = np.array([x.stimulus.level for x in test_responses])
+        n_correct = np.array([x.n_correct for x in test_responses])
+        srt_levels = np.r_[
+            levels[-20:], Response.get_next_level(test_responses.last())
+        ]       
+        srt = np.mean(srt_levels)
+        
+        fig = get_plots(levels, n_correct, srt)
+        test_results.append(
+            {
+                "test": test,
+                "srt": srt,
+                "result_plot": plot_to_data(fig),
+            }
+        )
+        
+    return render(request, "results.html", context={
+        "test_results": test_results,
+        "questionary": questionary
+    })

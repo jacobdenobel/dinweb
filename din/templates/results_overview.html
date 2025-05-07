@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Result overview {% endblock %}
+{% block style %}{% endblock %}
+{% block content %}
+
+
+<div class="container border border-secondary rounded p-4 my-4">
+  <h3 class="mb-3">Tests</h3>
+  <table class="table table-bordered table-hover table-striped align-middle text-center">
+    <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Active</th>
+        <th># Questions</th>
+        <th># Responses</th>
+        <th># Completed</th>
+        <th>Average Score (SNR)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for test in tests %}
+      <tr>
+        <td>{{ test.id }}</td>
+        <td>{{ test.name }}</td>
+        <td>
+          {% if test.active %}
+          <i class="bi bi-check-circle-fill text-success"></i>
+          {% else %}
+          <i class="bi bi-x-circle-fill text-danger"></i>
+          {% endif %}
+        </td>
+        <td>{{ test.n_questions }}</td>
+        <td>
+          {{ test.n_responses }}
+        </td>
+        <td>
+          {{ test.n_completed }}
+        </td>
+        <td>
+          {{test.mean_snr|floatformat:1 }} +- {{test.std_snr|floatformat:1 }}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <img src="data:image/png;base64,{{ boxplot }}" class="img-fluid" />
+</div>
+
+
+<div class="container border border-secondary rounded p-4 my-4">
+  <h3 class="mb-3">Questionaries</h3>
+  <table class="table table-bordered table-hover table-striped align-middle text-center">
+    <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>Age</th>
+        <th>Normal Hearing</th>
+        <th>Approve</th>
+        <th>First Time</th>
+        <th>First Language</th>
+        <th>View</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for q in questionaries %}
+      <tr>
+        <td>{{ q.id }}</td>
+        <td>{{ q.age }}</td>
+        <td>
+          {% if q.normal_hearing %}
+          <i class="bi bi-check-circle-fill text-success"></i>
+          {% else %}
+          <i class="bi bi-x-circle-fill text-danger"></i>
+          {% endif %}
+        </td>
+        <td>
+          {% if q.approve %}
+          <i class="bi bi-check-circle-fill text-success"></i>
+          {% else %}
+          <i class="bi bi-x-circle-fill text-danger"></i>
+          {% endif %}
+        </td>
+        <td>
+          {% if q.first_time %}
+          <i class="bi bi-check-circle-fill text-success"></i>
+          {% else %}
+          <i class="bi bi-x-circle-fill text-danger"></i>
+          {% endif %}
+        </td>
+        <td>
+          {% if q.first_language %}
+          <i class="bi bi-check-circle-fill text-success"></i>
+          {% else %}
+          <i class="bi bi-x-circle-fill text-danger"></i>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'results' q.id %}" class="btn btn-sm btn-outline-primary">
+            <i class="bi bi-eye"></i> View
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+{% endblock %}

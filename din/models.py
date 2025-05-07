@@ -1,3 +1,5 @@
+import numpy as np
+
 from django.conf import settings
 from django.db import models
 
@@ -13,6 +15,41 @@ class Test(models.Model):
     name = models.CharField(max_length=100, default="din")
     audio_generator = models.CharField(max_length=100, default="din")
     active = models.BooleanField()
+    
+    @property
+    def n_responses(self):
+        return len(self.response_set.all())
+    
+    @property
+    def n_completed(self):
+        return self.n_responses // self.n_questions
+    
+    def iter_entries(self, completed: bool = True):
+        entries = self.response_set.values_list("questionary", flat=True).distinct()
+        for entry in entries:
+            responses = self.response_set.filter(questionary=entry).order_by("index")
+            if completed and len(responses) != self.n_questions:
+                continue
+            yield responses
+    
+    
+    def get_snrs(self):
+        result = []
+        for responses in self.iter_entries(True):
+            levels = np.array([x.stimulus.level for x in responses])
+            snr_levels = np.r_[
+                levels[-20:], Response.get_next_level(responses.last())
+            ]
+            result.append(np.mean(snr_levels))
+        return result
+            
+    @property
+    def mean_snr(self):
+        return np.mean(self.get_snrs())
+    
+    @property
+    def std_snr(self):
+        return np.std(self.get_snrs())
 
 
 class Stimulus(models.Model):

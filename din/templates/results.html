@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Results for {{questionary.pk}} {% endblock %}
+{% block style %}{% endblock %}
+
+
+{% block content %}
+
+<h2 class="mb-3">{{questionary.pk}}: Age {{questionary.age}},
+    First time {% if questionary.first_time %}✅{% else %}❌{% endif %}</h2>
+
+
+{% for result in test_results %}
+    <div class="container border border-secondary rounded p-4 my-4">
+        <h3 class="mb-3" >Test {{result.test.pk}} ({{result.test.name}}_{{result.test.audio_generator}}) </h3>
+        <p><strong>SRT: </strong> {{result.srt|floatformat:2}}</p>
+        
+        <img src="data:image/png;base64,{{ result.result_plot }}" class="img-fluid" />
+    </div>
+
+{% endfor %}
+{% endblock %}
