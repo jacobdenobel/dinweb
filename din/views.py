@@ -162,7 +162,14 @@ def plot_to_data(fig) -> str:
     return uri
 
 def get_boxplot_snr(tests: Test) -> str:
-    snr_data = [t.get_snrs() for t in tests]
+    with_data = []
+    for test in tests:
+        if len(tests.get_snrs()) != 0:
+            with_data.append(test)
+    
+    
+    snr_data = [t.get_snrs() for t in with_data]
+    
     if len(snr_data) == 0:
         return ""
     
@@ -171,8 +178,8 @@ def get_boxplot_snr(tests: Test) -> str:
         snr_data,
         showmedians=True,        
     )
-    ax.set_xticks([y + 1 for y in range(len(tests))],
-                  labels=[f"{t.name}_{t.audio_generator}" for t in tests])
+    ax.set_xticks([y + 1 for y in range(len(with_data))],
+                  labels=[f"{t.name}_{t.audio_generator}" for t in with_data])
     ax.grid()
     return plot_to_data(fig)
     
