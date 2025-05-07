@@ -29,15 +29,25 @@ def mix(stim, noise, snr, relative_scaling=True):
         gain = 10 ** (snr / 20)
         
     stim_scaled = stim * gain
-    mixed = stim_scaled + noise_segment
+    mixed = stim_scaled + noise
     return mixed
+
+def mix_v2(stim, noise, snr):
+    mask = np.nonzero(stim)
+    db_stim = rms_db(stim[mask])
+    db_noise = rms_db(noise)
+    db_tgt = db_noise + snr
+    gain = 10 ** ((db_tgt - db_stim) / 20)
+    stim_scaled = stim * gain
+    mixed = noise + stim_scaled
+    return mixed    
             
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--min_snr", type=int, default=-20)
     parser.add_argument("--max_snr", type=int, default=10)
-    parser.add_argument("--increment", type=int, default=1)
+    parser.add_argument("--increment", type=int, default=2)
     parser.add_argument("--dont_rescale", action='store_true')
     parser.add_argument("--silence", type=float, default=.0)
     parser.add_argument("--save", action='store_true')
@@ -68,7 +78,7 @@ if __name__ == "__main__":
             
             start = np.random.randint(0, len(noise) - len(stim))
             noise_segment = noise[start:start+len(stim)].copy()
-            mixed = mix(stim, noise_segment, snr)
+            mixed = mix_v2(stim, noise_segment, snr)
                         
             print(rms_db(mixed))
             if not args.dont_rescale:
