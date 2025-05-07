@@ -192,6 +192,9 @@ def result_overview(request):
     active_param = request.GET.get('active')
     if active_param is not None:
         tests = Test.objects.filter(active=True)    
+        active_q = Response.objects.filter(
+            test__in=tests).values_list("questionary", flat=True).distinct()
+        questionaries = questionaries.filter(pk__in=active_q)
     
     return render(request, "results_overview.html", context={
         "questionaries": questionaries,
