@@ -34,6 +34,7 @@ if not DEBUG:
     ALLOWED_HOSTS.extend(
         [
             "jacobdenobel.nl",
+            "www.jacobdenobel.nl",
         ]    
     )
 

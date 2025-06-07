@@ -5,7 +5,7 @@ from scipy.special import expit
 import matplotlib.pyplot as plt
 
 def get_bins(levels, n_correct, lb=-20, ub=10):
-    bins = np.arange(lb, ub, step=2)
+    bins = np.arange(lb, ub+2, step=2)
     trials = np.zeros(len(bins))
     bin_words_correct = np.zeros(len(bins))
     bin_correct = np.zeros(len(bins))

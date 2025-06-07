@@ -187,7 +187,7 @@ def get_boxplot_snr(tests: Test) -> str:
 @login_required
 def result_overview(request):
     questionaries = Questionary.objects.all() 
-    tests = Test.objects.all().order_by("pk")
+    tests = Test.objects.all().order_by("-pk")
     
     active_param = request.GET.get('active')
     if active_param is not None:
