@@ -8,17 +8,19 @@ This Django application hosts a **Digits-in-Noise (DIN) test** with an associate
 
 ```
 dinweb/
-├── db.sqlite3              # Default SQLite DB
 ├── din/                    # Main Django app
-├── logs/                   # Logs directory
-├── manage.py               # Django CLI entry point
-├── media/                  # Audio test data: <test_name>/snr<snr_level>/file.wav
+├── settings/               # Django settings module
 ├── scripts/
 │   ├── audio_mixer.py      # Mix audio files with noise at various SNRs
 │   └── rescale_sound.py    # Rescale audio to target dB SNR
-├── settings/               # Django settings module
-├── static/                 # Static assets (CSS/JS/audio)
-├── venv/                   # Virtual environment (not tracked in Git)
+├── manage.py               # Django CLI entry point
+|
+*(not tracked in Git)*
+├── logs/                   # Logs directory
+├── db.sqlite3              # Default SQLite DB
+├── media/                  # Audio test data: <test_name>/snr<snr_level>/file.wav
+├── static/                 # Static assets (CSS/JS/audio) 
+├── venv/                   # Virtual environment 
 ```
 
 ---
