@@ -26,7 +26,7 @@ HOSTNAME = socket.gethostname()
 SECRET_KEY = "django-insecure-9)&1lm@5kri0tg%$do9!2mth=3a%u145!_mi9696x#3)(q*g)9"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = HOSTNAME == 'calc'
+DEBUG = True #HOSTNAME == 'calc'
 print(f"Running DEBUG: {DEBUG} on {HOSTNAME}")
 
 ALLOWED_HOSTS = []
